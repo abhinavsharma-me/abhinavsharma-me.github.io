@@ -1,0 +1,251 @@
+{
+  "useworldview": {
+    "id": "useworldview",
+    "number": "01 /",
+    "badge": "Production",
+    "badgeType": "production",
+    "title": "UseWorldview",
+    "heading": "Simulating User Experience with AI Personas",
+    "description": "An AI-powered synthetic user research platform that sends diverse personas through real websites and turns their journeys into structured product insights.",
+    "htmlFile": "/architectures/useworldview.html",
+    "visitUrl": "https://github.com/useworldview/main",
+    "visitLabel": "github.com/useworldview/main",
+    "visitType": "github",
+    "overview": "UseWorldview combines a Next.js research workspace with a FastAPI orchestration backend. Researchers submit a target URL and research goals, then the backend analyzes the site, identifies audience segments, generates AI personas, and schedules browser sessions. A Playwright-based worker lets each persona explore the target site, recording interaction events and screenshots. Post-session analysis produces findings and decision explanations, while cross-persona synthesis identifies patterns and generates prioritized recommendations. Supabase provides authentication, PostgreSQL storage, row-level security, and screenshot storage. The frontend reads study data directly from Supabase under RLS, while authenticated API requests handle study creation and long-running research jobs.",
+    "architecturalDecisions": [
+      {
+        "decision": "Separate the User Interface from Research Orchestration",
+        "reasoning": "The Next.js frontend handles study setup, progress, replay, and results, while FastAPI validates commands and coordinates backend work. This keeps browser-facing interactions separate from long-running research execution.",
+        "tradeoff": "The frontend, API, and Supabase access paths must share consistent authentication and study ownership rules."
+      },
+      {
+        "decision": "Use a PostgreSQL-Backed Job Queue",
+        "reasoning": "Site analysis, persona generation, browser sessions, and synthesis can take longer than a typical request. The Postgres queue lets the API enqueue work for a worker to process asynchronously and track job state.",
+        "tradeoff": "The worker must poll and manage job states, retries, and failures; queue throughput is tied to the database-backed implementation."
+      },
+      {
+        "decision": "Run Persona Sessions in a Browser Automation Worker",
+        "reasoning": "Personas need to interact with actual pages to produce experience evidence. Playwright gives the worker a browser environment for observing pages and carrying out actions within each session.",
+        "tradeoff": "Browser sessions consume more time and compute than direct API analysis and need operational limits such as step budgets and page limits."
+      },
+      {
+        "decision": "Let the Frontend Read Results from Supabase Under RLS",
+        "reasoning": "The frontend uses Supabase client access for study data and applies row-level security so users can access records associated with their own studies. The backend remains responsible for privileged orchestration and service-role operations.",
+        "tradeoff": "Data access policies must consistently protect related records across studies, personas, sessions, findings, and recommendations."
+      },
+      {
+        "decision": "Structure Research Evidence Before Synthesis",
+        "reasoning": "Interaction events, findings, decision explanations, cross-persona insights, and recommendations are stored as distinct records. This gives the product traceable evidence for replay and synthesis instead of returning only a single generated summary.",
+        "tradeoff": "Maintaining linked records across sessions and studies adds data-model and analysis complexity."
+      }
+    ],
+    "engineeringPrinciples": [
+      "Separate interactive API requests from long-running research jobs.",
+      "Use AI personas grounded in audience segments and situational context.",
+      "Capture browser actions as structured, replayable interaction events.",
+      "Keep research outputs linked to the sessions and evidence that produced them.",
+      "Apply row-level security to user-facing study data.",
+      "Use model-provider fallbacks to improve resilience when a provider is unavailable.",
+      "Turn individual persona experiences into cross-persona patterns and prioritized recommendations."
+    ],
+    "outcomes": [
+      "Built a full-stack flow from research goals and target URLs to generated personas and study results.",
+      "Enabled autonomous persona sessions that explore target websites through Playwright.",
+      "Recorded interaction events, screenshots, findings, and decision explanations for review.",
+      "Added cross-persona synthesis and prioritized product recommendations.",
+      "Connected a Next.js frontend, FastAPI backend, PostgreSQL job queue, Supabase data layer, and multiple LLM providers."
+    ]
+  },
+  "creatorsarthi": {
+    "id": "creatorsarthi",
+    "number": "02 /",
+    "badge": "Production",
+    "badgeType": "production",
+    "title": "CreatorSarthi",
+    "heading": "Designing a Self-Hosted Instagram Automation Platform",
+    "description": "A modular monolith architecture designed to unify creator engagement, event-driven automation, and audience management within a cohesive platform.",
+    "htmlFile": "/architectures/creatorsarthi.html",
+    "visitUrl": "https://creatorsarthi.com",
+    "visitLabel": "creatorsarthi.com",
+    "visitType": "website",
+    "overview": "CreatorSarthi was designed around a central architectural challenge: building a reliable automation platform that could manage multiple Instagram interaction workflows without introducing the operational complexity of independently deployed services. The system integrates Instagram events, automation rules, asynchronous job execution, creator-specific data, and public BioLink experiences into a unified platform. The architecture uses a modular monolith for cohesive product capabilities, with clear boundaries between integration, orchestration, data management, and user-facing experiences.",
+    
+    "architecturalDecisions": [
+      {
+        "decision": "Modular Monolith Instead of Microservices",
+        "reasoning": "The product's capabilities were closely related and shared a common data and identity model. A modular monolith avoided the operational overhead of distributed services, reduced internal network communication, and allowed the system to evolve through a single deployment boundary.",
+        "tradeoff": "The application retains a shared deployment lifecycle. Internal module boundaries therefore need to remain explicit as the platform grows."
+      },
+      {
+        "decision": "Database-Backed Asynchronous Job Processing",
+        "reasoning": "Instagram automation involves delayed actions, external API calls, retries, and platform rate limits. Moving execution into a persistent job queue prevents webhook handling from becoming coupled to the completion of downstream actions.",
+        "tradeoff": "The application must manage job claiming, concurrency, retries, and stale-job recovery carefully."
+      },
+      {
+        "decision": "Event-Driven Integration Boundary",
+        "reasoning": "Comments, messages, and story replies arrive as external events. A dedicated integration boundary separates platform-specific webhook handling from the internal automation domain, making it easier to evolve automation logic independently of incoming event formats.",
+        "tradeoff": "Webhook delivery, duplicate events, and external API failures require explicit validation and idempotent processing."
+      },
+      {
+        "decision": "Account-Scoped Data Isolation",
+        "reasoning": "Multiple creators operate independently within the same platform. Authentication and database-level row security establish ownership boundaries so that one creator's automations, contacts, and analytics remain isolated from another's.",
+        "tradeoff": "Every data-access path must preserve tenant context, including background processing and scheduled operations."
+      },
+      {
+        "decision": "Shared Platform Infrastructure",
+        "reasoning": "Authentication, persistence, storage, and scheduled processing are foundational capabilities used across the product. Centralizing these capabilities reduces duplicated infrastructure and keeps operational responsibilities manageable.",
+        "tradeoff": "Shared infrastructure creates common dependencies, so availability, access control, and failure handling must be considered across the platform."
+      }
+    ],
+    "engineeringPrinciples": [
+      "Keep related capabilities within a cohesive deployment boundary.",
+      "Separate external integrations from internal domain logic.",
+      "Treat asynchronous execution as persistent, recoverable work.",
+      "Enforce account isolation at the data-access boundary.",
+      "Design retry and deduplication behavior around unreliable external systems.",
+      "Prefer operational simplicity without sacrificing architectural boundaries."
+    ],
+    "outcomes": [
+      "Unified multiple Instagram engagement workflows within one platform.",
+      "Separated incoming event handling from asynchronous automation execution.",
+      "Established account-scoped data isolation.",
+      "Created a shared foundation for automation management and public creator experiences."
+    ]
+  },
+  "crewbench": {
+    "id": "crewbench",
+    "number": "03 /",
+    "badge": "Open Source · GitHub",
+    "badgeType": "opensource",
+    "title": "CrewBench",
+    "heading": "Building Observability for AI Coding Agents",
+    "description": "An open-source enhancement of an AI coding-agent workspace, focused on making agent-driven file changes traceable, inspectable, and auditable.",
+    "htmlFile": "/architectures/crewbench.html",
+    "visitUrl": "https://github.com/CrewBench/CrewBench",
+    "visitLabel": "github.com/CrewBench/CrewBench",
+    "visitType": "github",
+    "overview": "CrewBench is an open-source project hosted on GitHub, built on top of AionUi. The underlying platform provides a desktop environment for working with AI coding agents. My primary contributions focused on enhancing its developer-observability capabilities, particularly file-level version tracking and action logging. These enhancements address an important gap in AI-assisted software development: developers should be able to inspect not only the final output of an agent, but also the sequence of changes and actions that led to it. CrewBench adds this visibility at the control and observability layer, complementing existing development tools such as Git rather than replacing them.",
+    "architecturalDecisions": [
+      {
+        "decision": "Observability Layer Instead of a New Agent Runtime",
+        "reasoning": "The underlying AionUi platform already provides the desktop environment, agent integrations, and local file-system access. The more valuable enhancement was to make agent activity inspectable rather than introduce another agent execution layer. This kept the contribution focused on the gap between agent execution and developer visibility.",
+        "tradeoff": "The observability capabilities depend on the existing application's execution and file-operation pathways, so their coverage is tied to the actions those pathways expose."
+      },
+      {
+        "decision": "File-Level History Instead of Relying Only on Git",
+        "reasoning": "Git is designed around version control and commits, while AI-agent workflows can involve many intermediate file operations. Recording file-level changes provides a more immediate and granular view of agent behavior, including changes that have not yet become a commit.",
+        "tradeoff": "Maintaining content snapshots and change history introduces additional storage requirements and requires careful handling of recorded file content."
+      },
+      {
+        "decision": "Chronological Change Tracking",
+        "reasoning": "A final file state does not explain the sequence of operations that produced it. Recording operations with timestamps and workspace context allows developers to inspect how files changed over the course of an agent workflow.",
+        "tradeoff": "A useful timeline depends on consistently capturing relevant file operations and retaining enough context to interpret each event."
+      },
+      {
+        "decision": "Agent and Human Attribution",
+        "reasoning": "AI-assisted development involves both automated and human modifications. Recording actor attribution makes it possible to distinguish agent activity from human actions and understand how responsibility is distributed across a workflow.",
+        "tradeoff": "Attribution is only as reliable as the identity and context supplied by the application at the point an action is recorded."
+      },
+      {
+        "decision": "Snapshots and Line-Based Diffs",
+        "reasoning": "A list of file operations alone does not make changes easy to review. Content snapshots preserve the recorded state, while line-based diffs make the differences between versions easier to inspect.",
+        "tradeoff": "Snapshots and diff generation add processing and storage overhead, particularly for frequently modified or large files."
+      }
+    ],
+    "engineeringPrinciples": [
+      "Make AI-agent actions observable rather than treating execution as a black box.",
+      "Record file-level changes independently of Git commit boundaries.",
+      "Preserve chronological context around workspace modifications.",
+      "Distinguish human actions from agent-initiated operations.",
+      "Make changes inspectable through content snapshots and line-based diffs.",
+      "Extend the existing platform instead of duplicating its agent execution capabilities.",
+      "Treat observability as a core part of trustworthy AI-assisted development."
+    ],
+    "outcomes": [
+      "Contributed file-level version tracking to the open-source CrewBench project.",
+      "Enabled chronological inspection of file operations and recorded file states.",
+      "Added visibility into operation types, agent attribution, timestamps, and line-based changes.",
+      "Contributed to an action-logging capability for inspecting agent and human workspace activity.",
+      "Extended the existing AionUi foundation with developer-focused observability and review capabilities."
+    ]
+  },
+  "scan": {
+    "id": "scan",
+    "number": "04 /",
+    "badge": "Executable System · Bash CLI",
+    "badgeType": "production",
+    "title": "SCAN",
+    "heading": "Engineering an Executable Security Auditing & Remediation System",
+    "description": "A command-line security operations system built with Bash that discovers runtime environments, executes 12 configuration and security checks, calculates risk scores, generates structured reports, and performs approval-gated remediation.",
+    "htmlFile": "/architectures/scan_security_architecture.html",
+    "visitUrl": "https://github.com/abhinavsharma-me/openclaw-security-scan",
+    "visitLabel": "github.com/abhinavsharma-me/openclaw-security-scan",
+    "visitType": "github",
+    "overview": "SCAN is a Bash-powered command-line utility designed to audit the security posture of OpenClaw-related environments. Rather than acting as a collection of disconnected shell commands, it is structured as an executable system with command routing, environment discovery, configuration inspection, a multi-check assessment engine, centralized finding aggregation, risk scoring, reporting, and a controlled remediation workflow. Operators can invoke scan mode for an assessment, request JSON output for downstream automation, or enter fix mode to review and apply a limited set of supported configuration changes. The system searches environment-defined and standard configuration locations, deduplicates discovered files, and combines configuration-based inspection with selected host-level signals. Findings are classified as critical, warning, or passed; critical findings and warnings affect a score that begins at 100. In remediation mode, the utility presents planned changes for approval, creates a timestamped backup, and then executes supported fix handlers. The project demonstrates how shell scripting can be used to compose operating-system utilities into a repeatable operational workflow with explicit inputs, execution modes, state management, outputs, and guarded side effects.",
+    "architecturalDecisions": [
+      {
+        "decision": "A Command-Oriented CLI Instead of a Single-Purpose Script",
+        "reasoning": "The system exposes explicit scan and fix commands, along with help, version, JSON, and confirmation flags. A central dispatcher routes each invocation to the appropriate workflow, making the utility easier to operate and extend than a script that performs one fixed sequence of commands.",
+        "tradeoff": "Argument parsing and command behavior introduce additional control-flow paths that must be tested independently."
+      },
+      {
+        "decision": "Environment Discovery Before Assessment",
+        "reasoning": "Configuration files can exist in environment-defined locations, standard user directories, the current working directory, or system-level directories. A discovery stage collects candidate files before the assessment engine runs, allowing checks to operate against the discovered environment instead of relying on one hardcoded path.",
+        "tradeoff": "Discovery is limited to the configured search roots and recognized filenames. It does not guarantee that every possible configuration file or deployment location will be found."
+      },
+      {
+        "decision": "Composable Security Checks with Shared Finding State",
+        "reasoning": "The assessment is divided into 12 focused check functions. Each check evaluates a specific security concern and reports its result through shared aggregation helpers. This separates individual inspection logic from severity counters, score calculation, and report generation.",
+        "tradeoff": "The checks use lightweight configuration inspection and host-level heuristics. Their results should be interpreted as security indicators rather than proof of complete vulnerability coverage."
+      },
+      {
+        "decision": "Centralized Risk Scoring and Severity Classification",
+        "reasoning": "A shared scoring model starts at 100, deducts 12 points for each critical finding and 5 points for each warning, and assigns a letter grade. This provides operators with a compact security posture indicator while preserving the underlying finding lists for investigation.",
+        "tradeoff": "A fixed deduction model simplifies comparison but does not represent exploitability, business impact, or contextual risk weighting."
+      },
+      {
+        "decision": "Human-Readable and Machine-Readable Reporting",
+        "reasoning": "The system supports a terminal report for direct operator review and a JSON report containing the score, grade, check totals, and finding arrays. This allows the same assessment workflow to serve both interactive terminal usage and downstream automation or CI/CD integration.",
+        "tradeoff": "Structured output requires predictable serialization and careful separation of diagnostic messages from JSON data."
+      },
+      {
+        "decision": "Approval-Gated Remediation with Pre-Change Backups",
+        "reasoning": "Security findings can lead to configuration changes, so fix mode first identifies supported actions, presents them to the operator, and creates a timestamped backup before applying changes. The --yes flag supports non-interactive execution when explicitly selected.",
+        "tradeoff": "The remediation workflow is limited to selected configuration fixes. It does not provide transactional rollback or guarantee that every change is valid for every deployment."
+      },
+      {
+        "decision": "Explicitly Limiting Risky Automatic Changes",
+        "reasoning": "The script identifies plaintext API key exposure but deliberately leaves secret migration as a manual operation. Moving credentials automatically can break integrations or alter secret-handling behavior, so the tool reports the issue and provides guidance rather than attempting an unsafe migration.",
+        "tradeoff": "Some findings require operator intervention and cannot be resolved entirely through automated fix mode."
+      },
+      {
+        "decision": "Composing Existing Operating-System Utilities",
+        "reasoning": "The implementation uses Bash together with tools such as grep, sed, stat, chmod, cp, realpath, ss, and Node.js where available. This demonstrates how executable workflows can coordinate existing system capabilities without requiring a separate application runtime.",
+        "tradeoff": "Behavior can vary across operating systems and utility implementations. Some commands and flags require platform-specific handling."
+      }
+    ],
+    "engineeringPrinciples": [
+      "Treat shell scripts as executable operational systems with defined interfaces and execution modes.",
+      "Separate command routing, environment discovery, assessment, aggregation, reporting, and remediation responsibilities.",
+      "Discover configuration dynamically instead of assuming a single deployment layout.",
+      "Build focused checks that contribute to a shared and consistent finding model.",
+      "Preserve both detailed findings and a compact risk score.",
+      "Support human-operated workflows and machine-consumable JSON output.",
+      "Require deliberate approval before configuration-changing operations.",
+      "Create recoverable pre-change snapshots before applying supported fixes.",
+      "Avoid automatically modifying sensitive credentials when the operation is unsafe or ambiguous.",
+      "Use existing operating-system utilities as composable building blocks for executable automation.",
+      "Make exit codes meaningful so other scripts and CI/CD workflows can consume assessment outcomes."
+    ],
+    "outcomes": [
+      "Built a command-line security auditing utility with distinct scan and fix execution modes.",
+      "Implemented configuration discovery across environment-defined, user-level, working-directory, and system-level locations.",
+      "Implemented 12 security checks covering gateway exposure, API key patterns, file permissions, TLS indicators, shell allowlists, sensitive directories, webhook authentication, sandbox indicators, weak credentials, rate limiting, Node.js version thresholds, and Control UI authentication bypass.",
+      "Created centralized critical, warning, and passed finding aggregation with a 100-point scoring model and letter-grade classification.",
+      "Implemented terminal-friendly reporting and structured JSON output for downstream tooling.",
+      "Built a remediation workflow with operator confirmation, timestamped configuration backups, and selected automated fix handlers.",
+      "Added safeguards that keep sensitive API key migration as a manual operator task.",
+      "Demonstrated how Bash, command-line utilities, filesystem operations, and runtime inspection can be orchestrated into a reusable executable security workflow."
+    ]
+  }
+}

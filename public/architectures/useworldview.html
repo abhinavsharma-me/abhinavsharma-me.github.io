@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A presentation-ready architecture and research lifecycle overview of UseWorldview, an AI-powered synthetic user research system.">
+  <title>UseWorldview — AI research architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      color-scheme: light;
+      --paper: #f5f5f5;
+      --paper2: #ececec;
+      --ink: #2d3142;
+      --muted: #4f5d75;
+      --soft: #5a6580;
+      --rule: rgba(45,49,66,.12);
+      --solid: #bfc0c0;
+      --accent: #bf4520;
+      --tint: rgba(191,69,32,.08);
+      --link: #2e5aa8;
+      --sans: 'Geist', system-ui, sans-serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --mono: 'Geist Mono', monospace;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px clamp(20px, 4vw, 56px) 40px;
+    }
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--rule);
+      font: 500 11px var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+    .brand-mark { width: 15px; height: 15px; border: 1px solid var(--accent); border-radius: 50%; position: relative; }
+    .brand-mark:after { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; position: absolute; left: 4px; top: 4px; }
+    header { padding: 28px 0 20px; max-width: 900px; }
+    .eyebrow {
+      color: var(--accent);
+      font: 500 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      margin: 0 0 10px;
+    }
+    h1 {
+      font: 400 32px/1.15 var(--serif);
+      letter-spacing: -.02em;
+      margin: 0 0 10px;
+      color: var(--ink);
+    }
+    .dek {
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 760px;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+    nav { display: flex; gap: 9px; margin: 2px 0 30px; flex-wrap: wrap; }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font: 500 11px var(--mono);
+      letter-spacing: .05em;
+    }
+    nav a:first-child { color: var(--ink); border-color: var(--solid); }
+    nav a:hover { border-color: var(--accent); color: var(--accent); }
+    section { scroll-margin-top: 24px; margin: 0 0 42px; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      margin: 0 0 14px;
+    }
+    .section-kicker {
+      font: 500 11px var(--mono);
+      color: var(--soft);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin: 0 0 4px;
+    }
+    h2 {
+      font: 400 24px/1.2 var(--serif);
+      letter-spacing: -.015em;
+      margin: 0;
+      color: var(--ink);
+    }
+    .section-note {
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.5;
+      max-width: 420px;
+      text-align: right;
+      margin: 0;
+    }
+    .diagram-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    svg { display: block; width: 100%; height: auto; }
+    .architecture-svg { min-width: 1280px; }
+    .steps-svg { min-width: 1120px; }
+    .caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font: 10.5px var(--mono);
+      padding: 12px 2px 0;
+      letter-spacing: .03em;
+    }
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 1fr .88fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .insight {
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,.6);
+      min-height: 116px;
+    }
+    .insight-label {
+      font: 500 10.5px var(--mono);
+      color: var(--soft);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+    }
+    .insight p {
+      font-size: 13px;
+      line-height: 1.55;
+      margin: 0;
+      color: var(--ink);
+    }
+    .insight strong { font-weight: 600; }
+    .accent-rule { width: 22px; height: 2px; background: var(--accent); margin: 0 0 10px; }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid var(--rule);
+      padding-top: 14px;
+      color: var(--soft);
+      font: 10.5px var(--mono);
+      letter-spacing: .04em;
+    }
+    @media (max-width: 700px) {
+      .section-head { align-items: start; flex-direction: column; }
+      .section-note { text-align: left; }
+      .insight-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; }
+    }
+    @media print {
+      body { background: #fff; }
+      .page { width: 100%; padding: 14mm; }
+      nav { display: none; }
+      section { break-inside: avoid; margin-bottom: 24px; }
+      .diagram-container { overflow: visible; border-color: #ccc; }
+      .architecture-svg, .steps-svg { min-width: 0; }
+      .insight { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="topline"><div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>UseWorldview</span></div><span>System architecture · 2026</span></div>
+  <header>
+    <p class="eyebrow">Synthetic research, built as a system</p>
+    <h1>From human questions<br>to simulated experience.</h1>
+    <p class="dek">UseWorldview orchestrates AI personas through real websites, captures what they do and feel, then turns many individual journeys into evidence-backed product insight.</p>
+  </header>
+  <nav aria-label="Diagram sections"><a href="#architecture">01 · System architecture</a><a href="#lifecycle">02 · Research lifecycle</a></nav>
+
+  <section id="architecture" aria-labelledby="architecture-heading">
+    <div class="section-head"><div><p class="section-kicker">01 / The system</p><h2 id="architecture-heading">An AI research engine with a direct data plane</h2></div><p class="section-note">Commands enter through the API. Long-running work moves through a durable Postgres queue. The browser reads study results directly from Supabase under row-level security.</p></div>
+    <div class="diagram-container">
+      <svg class="architecture-svg" viewBox="0 0 1280 720" role="img" aria-labelledby="worldview-architecture-title worldview-architecture-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="worldview-architecture-title">UseWorldview system architecture</title>
+        <desc id="worldview-architecture-desc">Next.js research frontend sends commands to a FastAPI service and reads study data directly from Supabase. FastAPI enqueues jobs in the Postgres queue; a background worker runs browser sessions against the target website, calls language models, and saves structured results back to Supabase.</desc>
+        <defs>
+          <marker id="arch-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#4f5d75"/></marker>
+          <marker id="arch-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#2e5aa8"/></marker>
+          <marker id="arch-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#bf4520"/></marker>
+        </defs>
+        <rect width="1280" height="720" fill="#f5f5f5"/>
+        <!-- Scope zones -->
+        <rect x="40" y="110" width="252" height="416" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.14)"/>
+        <rect x="56" y="114" width="96" height="16" rx="2" fill="#f5f5f5"/><text x="62" y="126" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="1.4">WEB APP</text>
+        <rect x="320" y="110" width="568" height="416" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.14)"/>
+        <rect x="336" y="114" width="156" height="16" rx="2" fill="#f5f5f5"/><text x="342" y="126" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="1.4">ORCHESTRATION PLANE</text>
+        <rect x="916" y="110" width="324" height="416" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.14)"/>
+        <rect x="932" y="114" width="176" height="16" rx="2" fill="#f5f5f5"/><text x="938" y="126" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="1.4">DATA + MODEL ECOSYSTEM</text>
+
+        <!-- Connections are drawn behind nodes -->
+        <path d="M264 288 H338 Q346 288 346 296 V322 H376" fill="none" stroke="#2e5aa8" stroke-width="1.5" marker-end="url(#arch-arrow-link)"/>
+        <rect x="288" y="267" width="74" height="14" rx="2" fill="#f5f5f5"/><text x="325" y="277" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".5">COMMANDS</text>
+        <path d="M536 322 H584 Q592 322 592 314 V250 Q592 242 600 242 H632" fill="none" stroke="#4f5d75" stroke-width="1.25" marker-end="url(#arch-arrow)"/>
+        <rect x="550" y="298" width="70" height="14" rx="2" fill="#f5f5f5"/><text x="585" y="308" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".5">ENQUEUE</text>
+        <path d="M716 286 V360" fill="none" stroke="#bf4520" stroke-width="1.6" marker-end="url(#arch-arrow-accent)"/>
+        <rect x="722" y="313" width="68" height="14" rx="2" fill="#f5f5f5"/><text x="756" y="323" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".5">CLAIM JOB</text>
+        <path d="M792 410 H860 Q868 410 868 402 V190 Q868 182 876 182 H964" fill="none" stroke="#4f5d75" stroke-width="1.25" marker-end="url(#arch-arrow)"/>
+        <rect x="878" y="286" width="72" height="14" rx="2" fill="#f5f5f5"/><text x="914" y="296" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".4">BROWSER</text>
+        <path d="M792 454 H856 Q864 454 864 462 H964" fill="none" stroke="#2e5aa8" stroke-width="1.4" marker-end="url(#arch-arrow-link)"/>
+        <rect x="849" y="434" width="70" height="14" rx="2" fill="#f5f5f5"/><text x="884" y="444" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".5">INFERENCE</text>
+        <!-- Browser direct data access: routed through the clear lower corridor -->
+        <path d="M164 370 V572 Q164 580 172 580 H1072 Q1080 580 1080 572 V386" fill="none" stroke="#2e5aa8" stroke-width="1.3" stroke-dasharray="5 4" marker-end="url(#arch-arrow-link)"/>
+        <rect x="572" y="560" width="116" height="14" rx="2" fill="#f5f5f5"/><text x="630" y="570" text-anchor="middle" fill="#2e5aa8" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".5">RLS READS / UPDATES</text>
+        <!-- API -> managed Supabase control-plane write, enters from above -->
+        <path d="M456 276 V142 Q456 134 464 134 H1192 Q1200 134 1200 142 V270 Q1200 278 1192 278 H1108 Q1100 278 1100 286" fill="none" stroke="#4f5d75" stroke-width="1.15" stroke-dasharray="4 3" marker-end="url(#arch-arrow)"/>
+        <!-- worker persistence, routed below model/target line -->
+        <path d="M752 476 V540 Q752 548 760 548 H1100 Q1108 548 1108 540 V386" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arch-arrow)"/>
+        <rect x="880" y="528" width="118" height="14" rx="2" fill="#f5f5f5"/><text x="939" y="538" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".35">EVENTS + FINDINGS</text>
+
+        <!-- Nodes -->
+        <g>
+          <rect x="64" y="250" width="200" height="120" rx="6" fill="#f5f5f5"/><rect x="64" y="250" width="200" height="120" rx="6" fill="rgba(45,49,66,.025)" stroke="#5a6580" stroke-width="1"/>
+          <rect x="78" y="264" width="42" height="16" rx="2" fill="transparent" stroke="rgba(90,101,128,.55)"/><text x="99" y="275" text-anchor="middle" fill="#5a6580" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".7">WEB</text>
+          <text x="164" y="308" text-anchor="middle" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist',sans-serif">Research workspace</text>
+          <text x="164" y="332" text-anchor="middle" fill="#4f5d75" font-size="12" font-family="'Geist Mono',monospace">Next.js · React</text>
+          <text x="164" y="350" text-anchor="middle" fill="#5a6580" font-size="10" font-family="'Geist',sans-serif">Study setup · replay · insights</text>
+        </g>
+        <g>
+          <rect x="376" y="276" width="160" height="92" rx="6" fill="#f5f5f5"/><rect x="376" y="276" width="160" height="92" rx="6" fill="#fff" stroke="#2d3142" stroke-width="1.1"/>
+          <rect x="390" y="290" width="42" height="16" rx="2" fill="transparent" stroke="rgba(45,49,66,.4)"/><text x="411" y="301" text-anchor="middle" fill="#2d3142" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".7">API</text>
+          <text x="456" y="326" text-anchor="middle" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist',sans-serif">FastAPI</text>
+          <text x="456" y="348" text-anchor="middle" fill="#4f5d75" font-size="11" font-family="'Geist Mono',monospace">Auth · validation · jobs</text>
+        </g>
+        <g>
+          <rect x="632" y="198" width="168" height="88" rx="6" fill="#f5f5f5"/><rect x="632" y="198" width="168" height="88" rx="6" fill="rgba(45,49,66,.035)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="646" y="212" width="42" height="16" rx="2" fill="transparent" stroke="rgba(79,93,117,.5)"/><text x="667" y="223" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".7">QUEUE</text>
+          <text x="716" y="248" text-anchor="middle" fill="#2d3142" font-size="15" font-weight="600" font-family="'Geist',sans-serif">Postgres jobs</text>
+          <text x="716" y="268" text-anchor="middle" fill="#4f5d75" font-size="10" font-family="'Geist Mono',monospace">agent_jobs · retry state</text>
+        </g>
+        <g>
+          <rect x="632" y="360" width="160" height="116" rx="6" fill="#f5f5f5"/><rect x="632" y="360" width="160" height="116" rx="6" fill="rgba(191,69,32,.08)" stroke="#bf4520" stroke-width="1.4"/>
+          <rect x="646" y="374" width="54" height="16" rx="2" fill="transparent" stroke="rgba(191,69,32,.56)"/><text x="673" y="385" text-anchor="middle" fill="#bf4520" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".7">AI CORE</text>
+          <text x="712" y="414" text-anchor="middle" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist',sans-serif">Research worker</text>
+          <text x="712" y="437" text-anchor="middle" fill="#4f5d75" font-size="10" font-family="'Geist Mono',monospace">Playwright · persona loop</text>
+          <text x="712" y="456" text-anchor="middle" fill="#5a6580" font-size="10" font-family="'Geist',sans-serif">Perceive → decide → act</text>
+        </g>
+        <g>
+          <rect x="964" y="286" width="232" height="100" rx="6" fill="#f5f5f5"/><rect x="964" y="286" width="232" height="100" rx="6" fill="rgba(45,49,66,.05)" stroke="#4f5d75" stroke-width="1.1"/>
+          <rect x="978" y="300" width="70" height="16" rx="2" fill="transparent" stroke="rgba(79,93,117,.5)"/><text x="1013" y="311" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing=".7">PLATFORM</text>
+          <text x="1080" y="338" text-anchor="middle" fill="#2d3142" font-size="17" font-weight="600" font-family="'Geist',sans-serif">Supabase</text>
+          <text x="1080" y="358" text-anchor="middle" fill="#4f5d75" font-size="10" font-family="'Geist Mono',monospace">Postgres · Auth · RLS · Storage</text>
+          <text x="1080" y="375" text-anchor="middle" fill="#5a6580" font-size="10" font-family="'Geist',sans-serif">Studies → sessions → evidence → actions</text>
+        </g>
+        <g>
+          <rect x="964" y="146" width="180" height="72" rx="6" fill="#f5f5f5"/><rect x="964" y="146" width="180" height="72" rx="6" fill="rgba(45,49,66,.025)" stroke="rgba(45,49,66,.3)"/>
+          <text x="1054" y="176" text-anchor="middle" fill="#2d3142" font-size="14" font-weight="600" font-family="'Geist',sans-serif">Target website</text>
+          <text x="1054" y="197" text-anchor="middle" fill="#4f5d75" font-size="10" font-family="'Geist Mono',monospace">Live browser exploration</text>
+        </g>
+        <g>
+          <rect x="964" y="414" width="240" height="94" rx="6" fill="#f5f5f5"/><rect x="964" y="414" width="240" height="94" rx="6" fill="rgba(45,49,66,.025)" stroke="rgba(45,49,66,.3)"/>
+          <text x="1084" y="446" text-anchor="middle" fill="#2d3142" font-size="14" font-weight="600" font-family="'Geist',sans-serif">LLM providers</text>
+          <text x="1084" y="469" text-anchor="middle" fill="#4f5d75" font-size="10" font-family="'Geist Mono',monospace">Groq · Gemini · OpenRouter · Claude</text>
+        </g>
+
+        <!-- Legend -->
+        <line x1="40" y1="632" x2="1240" y2="632" stroke="rgba(45,49,66,.14)" stroke-width="1"/>
+        <text x="48" y="657" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="1.2">READ THE SYSTEM</text>
+        <line x1="210" y1="654" x2="244" y2="654" stroke="#2e5aa8" stroke-width="1.5" marker-end="url(#arch-arrow-link)"/><text x="254" y="658" fill="#4f5d75" font-size="10" font-family="'Geist',sans-serif">HTTP / browser access</text>
+        <line x1="430" y1="654" x2="464" y2="654" stroke="#4f5d75" stroke-width="1.3" marker-end="url(#arch-arrow)"/><text x="474" y="658" fill="#4f5d75" font-size="10" font-family="'Geist',sans-serif">Internal job / data flow</text>
+        <line x1="682" y1="654" x2="716" y2="654" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arch-arrow)"/><text x="726" y="658" fill="#4f5d75" font-size="10" font-family="'Geist',sans-serif">Privileged write path</text>
+        <rect x="954" y="646" width="12" height="12" rx="2" fill="rgba(191,69,32,.08)" stroke="#bf4520"/><text x="976" y="657" fill="#4f5d75" font-size="10" font-family="'Geist',sans-serif">AI execution core</text>
+        <text x="48" y="695" fill="#5a6580" font-size="9" font-family="'Geist Mono',monospace" letter-spacing=".2">Worker can run as a separate process or alongside the API in unified mode.</text>
+      </svg>
+    </div>
+    <div class="caption"><span>CONTROL PLANE · API AUTHENTICATES AND SCHEDULES</span><span>DATA PLANE · BROWSER READS ARE SCOPED BY RLS</span></div>
+    <div class="insight-grid">
+      <article class="insight"><div class="accent-rule"></div><p class="insight-label">The core pattern</p><p><strong>Durable orchestration.</strong> A Postgres-backed job queue decouples user actions from long-running research and browser sessions.</p></article>
+      <article class="insight"><p class="insight-label">The AI loop</p><p>Personas carry a worldview and situational context into an observe → decide → act cycle. Each step becomes a replayable interaction event.</p></article>
+      <article class="insight"><p class="insight-label">The output</p><p>Individual sessions become findings, decision explanations, cross-persona patterns, and prioritized recommendations.</p></article>
+    </div>
+  </section>
+
+  <section id="lifecycle" aria-labelledby="lifecycle-heading">
+    <div class="section-head"><div><p class="section-kicker">02 / The research lifecycle</p><h2 id="lifecycle-heading">One study. Five transformations.</h2></div><p class="section-note">The product turns a target URL and research goal into a structured, reviewable body of evidence.</p></div>
+    <div class="diagram-container">
+      <svg class="steps-svg" viewBox="0 0 1120 560" role="img" aria-labelledby="worldview-steps-title worldview-steps-desc" xmlns="http://www.w3.org/2000/svg">
+        <title id="worldview-steps-title">UseWorldview research lifecycle</title>
+        <desc id="worldview-steps-desc">Five stages move from defining a study, to understanding its audience, generating personas, observing their browser sessions, and synthesizing findings into product recommendations.</desc>
+        <rect width="1120" height="560" fill="#f5f5f5"/>
+        <g aria-hidden="true">
+          <rect x="60" y="214" width="200" height="48" fill="rgba(45,49,66,.055)" data-role="rail" data-step="define" data-index="1"/>
+          <rect x="260" y="214" width="200" height="48" fill="rgba(45,49,66,.09)" data-role="rail" data-step="understand" data-index="2"/>
+          <rect x="460" y="214" width="200" height="48" fill="rgba(191,69,32,.08)" data-role="rail" data-step="simulate" data-index="3" data-focal="true"/>
+          <rect x="660" y="214" width="200" height="48" fill="rgba(45,49,66,.055)" data-role="rail" data-step="observe" data-index="4"/>
+          <rect x="860" y="214" width="200" height="48" fill="rgba(45,49,66,.09)" data-role="rail" data-step="synthesize" data-index="5"/>
+          <line x1="60" y1="214" x2="660" y2="214" stroke="rgba(45,49,66,.32)"/><line x1="60" y1="262" x2="460" y2="262" stroke="rgba(45,49,66,.32)"/><line x1="660" y1="262" x2="1060" y2="262" stroke="rgba(45,49,66,.32)"/><line x1="460" y1="214" x2="660" y2="214" stroke="#bf4520" stroke-width="1.5"/><line x1="460" y1="262" x2="660" y2="262" stroke="#bf4520" stroke-width="1.5"/>
+        </g>
+        <g font-family="'Geist Mono',monospace" font-size="9" font-weight="600" letter-spacing="1.2" text-anchor="middle">
+          <text x="160" y="160" fill="#4f5d75" data-role="number" data-step="define">01</text><text x="360" y="160" fill="#4f5d75" data-role="number" data-step="understand">02</text><text x="560" y="160" fill="#bf4520" data-role="number" data-step="simulate">03</text><text x="760" y="160" fill="#4f5d75" data-role="number" data-step="observe">04</text><text x="960" y="160" fill="#4f5d75" data-role="number" data-step="synthesize">05</text>
+        </g>
+        <g aria-hidden="true" fill="#f5f5f5" stroke-width="1.2">
+          <circle cx="160" cy="238" r="34" stroke="#4f5d75" data-role="medallion" data-step="define"/><circle cx="360" cy="238" r="34" stroke="#4f5d75" data-role="medallion" data-step="understand"/><circle cx="560" cy="238" r="34" fill="rgba(191,69,32,.08)" stroke="#bf4520" data-role="medallion" data-step="simulate" data-focal="true"/><circle cx="760" cy="238" r="34" stroke="#4f5d75" data-role="medallion" data-step="observe"/><circle cx="960" cy="238" r="34" stroke="#4f5d75" data-role="medallion" data-step="synthesize"/>
+        </g>
+        <g fill="none" stroke="#2d3142" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <!-- study brief --> <path d="M153 225h13l7 7v18h-20z M166 225v8h7 M157 238h12 M157 243h12"/>
+          <!-- audience --> <circle cx="355" cy="233" r="6"/><path d="M344 250c1-7 5-10 11-10s10 3 11 10 M367 228c4 1 6 4 6 8 M373 241c4 2 6 5 6 9"/>
+          <!-- persona --> <circle cx="560" cy="235" r="13" stroke="#bf4520"/><path d="M552 239c2-4 5-6 8-6s6 2 8 6 M556 230h.1 M564 230h.1" stroke="#bf4520"/>
+          <!-- browser --> <rect x="746" y="226" width="28" height="23" rx="2"/><path d="M746 232h28 M751 229h.1 M755 229h.1 M753 239l4 4 7-8"/>
+          <!-- synthesis --> <path d="M949 230h22 M949 238h16 M949 246h11 M967 244l5 5 8-11"/>
+        </g>
+        <g text-anchor="middle" font-family="'Geist',sans-serif">
+          <text x="160" y="326" fill="#2d3142" font-size="16" font-weight="600">Frame the study</text><text x="160" y="352" fill="#4f5d75" font-size="11">Target URL + research goal</text><text x="160" y="371" fill="#4f5d75" font-size="11">Authorization confirmed</text>
+          <text x="360" y="326" fill="#2d3142" font-size="16" font-weight="600">Map the audience</text><text x="360" y="352" fill="#4f5d75" font-size="11">Site analysis finds segments</text><text x="360" y="371" fill="#4f5d75" font-size="11">Context anchors the study</text>
+          <text x="560" y="326" fill="#bf4520" font-size="16" font-weight="600">Create worldviews</text><text x="560" y="352" fill="#4f5d75" font-size="11">Generate distinct AI personas</text><text x="560" y="371" fill="#4f5d75" font-size="11">Grounded in audience segments</text>
+          <text x="760" y="326" fill="#2d3142" font-size="16" font-weight="600">Run experiences</text><text x="760" y="352" fill="#4f5d75" font-size="11">Personas explore in a browser</text><text x="760" y="371" fill="#4f5d75" font-size="11">Events + screenshots captured</text>
+          <text x="960" y="326" fill="#2d3142" font-size="16" font-weight="600">Turn evidence into action</text><text x="960" y="352" fill="#4f5d75" font-size="11">Synthesize patterns + decisions</text><text x="960" y="371" fill="#4f5d75" font-size="11">Prioritize product improvements</text>
+        </g>
+        <line x1="60" y1="438" x2="1060" y2="438" stroke="rgba(45,49,66,.14)"/>
+        <text x="60" y="469" fill="#4f5d75" font-size="8" font-family="'Geist Mono',monospace" letter-spacing="1.3">WHAT ACCUMULATES</text>
+        <g font-family="'Geist Mono',monospace" font-size="9" letter-spacing=".3">
+          <rect x="60" y="487" width="174" height="28" rx="3" fill="rgba(45,49,66,.035)" stroke="rgba(45,49,66,.14)"/><text x="147" y="505" text-anchor="middle" fill="#4f5d75">AUDIENCE SEGMENTS</text>
+          <rect x="250" y="487" width="154" height="28" rx="3" fill="rgba(45,49,66,.035)" stroke="rgba(45,49,66,.14)"/><text x="327" y="505" text-anchor="middle" fill="#4f5d75">PERSONA WORLDS</text>
+          <rect x="420" y="487" width="168" height="28" rx="3" fill="rgba(45,49,66,.035)" stroke="rgba(45,49,66,.14)"/><text x="504" y="505" text-anchor="middle" fill="#4f5d75">INTERACTION EVENTS</text>
+          <rect x="604" y="487" width="132" height="28" rx="3" fill="rgba(45,49,66,.035)" stroke="rgba(45,49,66,.14)"/><text x="670" y="505" text-anchor="middle" fill="#4f5d75">FINDINGS</text>
+          <rect x="752" y="487" width="178" height="28" rx="3" fill="rgba(45,49,66,.035)" stroke="rgba(45,49,66,.14)"/><text x="841" y="505" text-anchor="middle" fill="#4f5d75">CROSS-PERSONA INSIGHTS</text>
+          <rect x="946" y="487" width="114" height="28" rx="3" fill="rgba(191,69,32,.08)" stroke="#bf4520"/><text x="1003" y="505" text-anchor="middle" fill="#bf4520">ACTIONS</text>
+        </g>
+      </svg>
+    </div>
+    <div class="caption"><span>FROM A RESEARCH QUESTION</span><span>TO EVIDENCE-BACKED PRODUCT DECISIONS</span></div>
+  </section>
+
+  <footer><span>UseWorldview · System architecture overview</span><span>Prepared for the people building what comes next</span></footer>
+</div>
+</body>
+</html>

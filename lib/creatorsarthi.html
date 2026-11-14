@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CreatorSarthi Platform Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      color-scheme: light;
+      --paper: #f5f5f5;
+      --ink: #2d3142;
+      --muted: #4f5d75;
+      --soft: #5a6580;
+      --rule: rgba(45,49,66,.12);
+      --accent: #bf4520;
+      --tint: rgba(191,69,32,.08);
+      --link: #2e5aa8;
+      --sans: 'Geist', system-ui, sans-serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --mono: 'Geist Mono', monospace;
+    }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px clamp(20px, 4vw, 56px) 40px;
+    }
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--rule);
+      font: 500 11px var(--mono);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); }
+    .brand-mark { width: 15px; height: 15px; border: 1px solid var(--accent); border-radius: 50%; position: relative; }
+    .brand-mark:after { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; position: absolute; left: 4px; top: 4px; }
+    header { padding: 28px 0 20px; max-width: 900px; }
+    .eyebrow {
+      color: var(--accent);
+      font: 500 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      margin: 0 0 10px;
+    }
+    h1 {
+      font: 400 32px/1.15 var(--serif);
+      letter-spacing: -.02em;
+      margin: 0 0 10px;
+      color: var(--ink);
+    }
+    h2 {
+      font: 400 24px/1.2 var(--serif);
+      letter-spacing: -.015em;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+    h3 {
+      font: 600 15px/1.35 var(--sans);
+      letter-spacing: -.01em;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+    .dek {
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 760px;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+    .notice-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(45,49,66,.05);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 5px 11px;
+      font: 500 10.5px var(--mono);
+      letter-spacing: .03em;
+      color: var(--soft);
+      margin-bottom: 24px;
+    }
+    .diagram-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    svg { display: block; width: 100%; min-width: 1280px; height: auto; }
+    .caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font: 10.5px var(--mono);
+      padding: 12px 2px 0;
+      letter-spacing: .03em;
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid var(--rule);
+      margin-top: 36px;
+      padding-top: 14px;
+      color: var(--soft);
+      font: 10.5px var(--mono);
+      letter-spacing: .04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>CreatorSarthi</span></div>
+      <span>System architecture · 2026</span>
+    </div>
+
+    <header>
+      <p class="eyebrow">Modular Monolith · System Architecture</p>
+      <h1>CreatorSarthi, from entry points to data services.</h1>
+      <p class="dek">A unified modular monolith architecture connecting creator engagement, Meta Instagram APIs, event-driven webhooks, and Supabase data services.</p>
+      <div class="notice-pill">Selectively redacted to protect CreatorSarthi's proprietary implementation details and internal assets.</div>
+    </header>
+
+    <div class="diagram-container">
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="architecture-title architecture-desc">
+        <title id="architecture-title">CreatorSarthi platform architecture</title>
+        <desc id="architecture-desc">Creators and BioLink visitors use a Next.js application that connects to Meta's Instagram APIs and Supabase authentication, Postgres, storage, and scheduled processing.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#4f5d75"/></marker>
+          <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0 0L8 3L0 6Z" fill="#2e5aa8"/></marker>
+        </defs>
+
+        <rect x="0" y="0" width="1280" height="720" fill="#f5f5f5"/>
+
+        <!-- Trust and service zones -->
+        <rect x="96" y="96" width="1088" height="124" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.10)" stroke-width="1"/>
+        <rect x="112" y="100" width="204" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="120" y="110" fill="#5a6580" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" font-weight="500" letter-spacing="1.2">ACTORS + META PLATFORM</text>
+
+        <rect x="96" y="244" width="1088" height="224" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.10)" stroke-width="1"/>
+        <rect x="112" y="248" width="294" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="120" y="258" fill="#5a6580" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" font-weight="500" letter-spacing="1.2">RUNTIME · VERCEL / CLOUDFLARE WORKERS</text>
+
+        <rect x="96" y="500" width="1088" height="148" rx="8" fill="rgba(45,49,66,.02)" stroke="rgba(45,49,66,.10)" stroke-width="1"/>
+        <rect x="112" y="504" width="266" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="120" y="514" fill="#5a6580" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" font-weight="500" letter-spacing="1.2">SUPABASE PROJECT · MANAGED SERVICES</text>
+
+        <!-- Connectors: orthogonal routes, drawn beneath nodes -->
+        <path d="M248 200V236H568V332" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M928 200V228H704V332" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <path d="M736 332V264Q736 256 744 256H1032Q1040 256 1040 248V200" fill="none" stroke="#2e5aa8" stroke-width="1.2" marker-end="url(#arrow-link)"/>
+        <path d="M560 404V520H240V552" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M696 404V552" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M720 404V472H976V552" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M456 552V496H504Q512 496 512 488V376Q512 368 520 368" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+        <!-- Arrow labels sit beside their strokes with paper masks -->
+        <rect x="378" y="216" width="48" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="402" y="226" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".5">HTTPS</text>
+
+        <rect x="786" y="208" width="58" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="815" y="218" text-anchor="middle" fill="#2e5aa8" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".4">WEBHOOK</text>
+
+        <rect x="1048" y="212" width="70" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="1083" y="222" text-anchor="middle" fill="#2e5aa8" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".4">GRAPH API</text>
+
+        <rect x="276" y="498" width="52" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="302" y="508" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".4">SESSION</text>
+
+        <rect x="708" y="446" width="70" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="743" y="456" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".4">READ / WRITE</text>
+
+        <rect x="832" y="450" width="48" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="856" y="460" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".4">MEDIA</text>
+
+        <rect x="520" y="448" width="72" height="14" rx="2" fill="#f5f5f5"/>
+        <text x="556" y="458" text-anchor="middle" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".4">EVERY MINUTE</text>
+
+        <!-- Nodes -->
+        <g>
+          <rect x="152" y="136" width="192" height="64" rx="6" fill="rgba(45,49,66,.03)" stroke="rgba(45,49,66,.30)" stroke-width="1"/>
+          <rect x="164" y="144" width="56" height="12" rx="2" fill="#ececec"/>
+          <text x="192" y="153" text-anchor="middle" fill="#5a6580" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">INPUT</text>
+          <text x="168" y="174" fill="#2d3142" font-size="12" font-family="'Geist',system-ui,sans-serif" font-weight="600">Creator + visitor</text>
+          <text x="168" y="189" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">dashboard · BioLink</text>
+        </g>
+
+        <g>
+          <rect x="880" y="136" width="240" height="64" rx="6" fill="rgba(45,49,66,.03)" stroke="rgba(45,49,66,.30)" stroke-width="1"/>
+          <rect x="892" y="144" width="72" height="12" rx="2" fill="#ececec"/>
+          <text x="928" y="153" text-anchor="middle" fill="#5a6580" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">EXTERNAL</text>
+          <text x="896" y="174" fill="#2d3142" font-size="12" font-family="'Geist',system-ui,sans-serif" font-weight="600">Meta · Instagram</text>
+          <text x="896" y="189" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">webhooks · Graph API</text>
+        </g>
+
+        <g>
+          <rect x="520" y="332" width="240" height="72" rx="6" fill="rgba(191,69,32,.08)" stroke="#bf4520" stroke-width="1.2"/>
+          <rect x="532" y="340" width="92" height="12" rx="2" fill="rgba(191,69,32,.14)"/>
+          <text x="578" y="349" text-anchor="middle" fill="#bf4520" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">CORE APPLICATION</text>
+          <text x="536" y="373" fill="#2d3142" font-size="13" font-family="'Geist',system-ui,sans-serif" font-weight="600">Next.js application</text>
+          <text x="536" y="390" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">marketing · AutoDM · BioLink · API</text>
+        </g>
+
+        <g>
+          <rect x="160" y="552" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="172" y="560" width="64" height="12" rx="2" fill="#ececec"/>
+          <text x="204" y="569" text-anchor="middle" fill="#5a6580" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">IDENTITY</text>
+          <text x="176" y="590" fill="#2d3142" font-size="12" font-family="'Geist',system-ui,sans-serif" font-weight="600">Supabase Auth</text>
+          <text x="176" y="605" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">sessions · JWT</text>
+        </g>
+
+        <g>
+          <rect x="376" y="552" width="160" height="64" rx="6" fill="rgba(45,49,66,.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="388" y="560" width="80" height="12" rx="2" fill="#ececec"/>
+          <text x="428" y="569" text-anchor="middle" fill="#5a6580" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">SCHEDULER</text>
+          <text x="392" y="590" fill="#2d3142" font-size="12" font-family="'Geist',system-ui,sans-serif" font-weight="600">pg_cron</text>
+          <text x="392" y="605" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">HTTP tick · maintenance</text>
+        </g>
+
+        <g>
+          <rect x="592" y="552" width="208" height="64" rx="6" fill="rgba(45,49,66,.05)" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="604" y="560" width="72" height="12" rx="2" fill="#ececec"/>
+          <text x="640" y="569" text-anchor="middle" fill="#5a6580" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">PERSISTENCE</text>
+          <text x="608" y="590" fill="#2d3142" font-size="12" font-family="'Geist',system-ui,sans-serif" font-weight="600">Postgres</text>
+          <text x="608" y="605" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">RLS · job queue · product data</text>
+        </g>
+
+        <g>
+          <rect x="896" y="552" width="160" height="64" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="908" y="560" width="64" height="12" rx="2" fill="#ececec"/>
+          <text x="940" y="569" text-anchor="middle" fill="#5a6580" font-size="7" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".8">ASSETS</text>
+          <text x="912" y="590" fill="#2d3142" font-size="12" font-family="'Geist',system-ui,sans-serif" font-weight="600">Supabase Storage</text>
+          <text x="912" y="605" fill="#4f5d75" font-size="9" font-family="'Geist Mono',ui-monospace,monospace">DM card images</text>
+        </g>
+
+        <!-- Horizontal legend strip -->
+        <line x1="96" y1="660" x2="1184" y2="660" stroke="rgba(45,49,66,.12)" stroke-width="1"/>
+        <rect x="120" y="680" width="12" height="12" rx="2" fill="rgba(191,69,32,.08)" stroke="#bf4520" stroke-width="1"/>
+        <text x="140" y="689" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".3">APPLICATION</text>
+        <rect x="274" y="680" width="12" height="12" rx="2" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="294" y="689" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".3">SERVICE</text>
+        <rect x="398" y="680" width="12" height="12" rx="2" fill="rgba(45,49,66,.05)" stroke="#4f5d75" stroke-width="1"/>
+        <text x="418" y="689" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".3">DATA</text>
+        <rect x="494" y="680" width="12" height="12" rx="2" fill="rgba(45,49,66,.03)" stroke="rgba(45,49,66,.30)" stroke-width="1"/>
+        <text x="514" y="689" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".3">EXTERNAL</text>
+        <line x1="634" y1="686" x2="682" y2="686" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <text x="694" y="689" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".3">REQUEST / DATA</text>
+        <line x1="846" y1="686" x2="894" y2="686" stroke="#4f5d75" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="906" y="689" fill="#4f5d75" font-size="8" font-family="'Geist Mono',ui-monospace,monospace" letter-spacing=".3">SCHEDULED</text>
+      </svg>
+    </div>
+    <div class="caption">
+      <span>ENTRY POINTS: NEXT.JS &amp; META WEBHOOKS</span>
+      <span>PERSISTENCE &amp; JOBS: SUPABASE POSTGRES</span>
+    </div>
+
+    <footer>
+      <span>CreatorSarthi · Modular monolith architecture</span>
+      <span>Production system overview</span>
+    </footer>
+  </div>
+</body>
+</html>
