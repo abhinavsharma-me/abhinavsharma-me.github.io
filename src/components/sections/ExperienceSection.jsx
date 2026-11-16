@@ -52,7 +52,7 @@ export default function ExperienceSection() {
       <div className="experience-header">
         <div className="experience-header-left">
           <div className="section-eyebrow">02 &nbsp;/&nbsp; EXPERIENCE</div>
-          <h2 id="experience-heading" className="section-heading">Systems I've Built</h2>
+          <h2 id="experience-heading" className="section-heading experience-heading">Systems I've Built</h2>
           <p className="experience-subheading">
             A record of the systems I've designed, engineered, and brought into production.
           </p>

@@ -1,3 +1,4 @@
+
 export const careerRoles = [
   {
     key: 'tech-lead',
@@ -26,50 +27,53 @@ export const allProjects = [
     website: 'https://www.qurovo.com/qurovo-assist',
     websiteLabel: 'SEE IT IN ACTION',
     title: 'Q Support AI',
-    subtitle: 'A multi-agent system for healthcare discovery and patient support.',
-    problem: 'Patients often struggle to find the right hospital or doctor for their condition. General AI chatbots produce generic or unreliable answers without real healthcare context.',
-    solution: 'Designed and built a multi-agent system that combines LLM reasoning, structured tools, and retrieval to deliver accurate, contextual, and reliable hospital and doctor recommendations.',
+    subtitle: 'Multi-agent healthcare assistant for hospital discovery and patient support.',
+    problem: 'Patients struggle to identify suitable hospitals and doctors for their medical needs. General-purpose AI systems lack access to structured healthcare data and often return inaccurate or irrelevant recommendations.',
+    solution: 'Designed the multi-agent architecture connecting LLMs, retrieval pipelines, structured healthcare data, and backend tools to generate contextual hospital and doctor recommendations.',
     contributions: [
-      'Designed the multi-agent architecture and workflows',
-      'Built retrieval and tool-based execution for healthcare data',
-      'Implemented response validation and safety guardrails',
-      'Engineered for production reliability and controlled execution'
+      'Designed the multi-agent architecture and agent responsibilities',
+      'Defined orchestration and execution workflows',
+      'Implemented retrieval pipelines and structured tool integration',
+      'Added response validation and medical safety checks',
+      'Handled production reliability and error recovery'
     ],
     tabs: {
       ARCHITECTURE: {
-        title: 'Multi-Agent Orchestration & Workflow Topology',
-        description: 'Decomposed clinical discovery into specialized cooperating agents coordinated via Orchestration: a Symptom Triage Agent, an Entity & Geography Parser, and a Medical Provider Retrieval Agent.',
+        title: 'Multi-Agent Architecture',
+        description: 'Designed an orchestrated system with specialized agents for symptom analysis, entity extraction, and healthcare provider retrieval.',
         highlights: [
-          'Hierarchical supervisor architecture with deterministic boundary checks',
-          'Context-isolated execution threads preventing cross-conversation pollution',
-          'Stateless tool dispatch workers running in parallel for low latency',
-          'Graceful fallback cascades for low-confidence model completions'
+          'Implemented supervisor-based agent orchestration',
+          'Defined agent responsibilities and execution boundaries',
+          'Added conversation-level state management',
+          'Implemented parallel tool execution',
+          'Added fallback handling for failed or low-confidence responses'
         ]
       },
       ENGINEERING: {
-        title: 'Production Reliability & Guardrail Implementation',
-        description: 'Engineered strict schema-bound response generation and deterministic clinical rules preventing hallucinated dosages, treatments, or ungrounded medical claims.',
+        title: 'Reliability & Execution',
+        description: 'Implemented validation and execution controls across the agent workflows to improve response consistency and prevent unsupported medical information.',
         highlights: [
-          'Enforced structured outputs across all LLM inference endpoints',
-          'Built automated evaluation harness.',
-          'Implemented dynamic semantic caching.',
-          'Containerized microservices orchestrated on Cloud.'
+          'Enforced structured outputs for LLM responses',
+          'Implemented response validation and medical guardrails',
+          'Added semantic caching for repeated queries',
+          'Implemented error handling across agent execution',
+          'Containerized backend services for deployment'
         ]
       },
       IMPACT: {
-        title: 'Clinical Accuracy & Production Outcomes',
-        description: 'Delivered significant improvements in answer reliability, recommendation relevance, and patient intake satisfaction during production rollout.',
+        title: 'Production Outcomes',
+        description: 'Focused on improving response accuracy, retrieval relevance, and execution latency.',
         highlights: [
-          '~90% verified reduction in factual and clinical hallucinations',
-          '~2s end-to-end response generation across multi-step agent chains'
+          '~90% reduction in factual and clinical hallucinations',
+          '~2s end-to-end response generation time'
         ]
       }
     },
     outcome: {
       stat1: '~90%',
       stat1Label: 'REDUCTION IN HALLUCINATIONS',
-      stat2: 'PRODUCTION',
-      stat2Label: 'SAFETY-FOCUSED WORKFLOWS'
+      stat2: '~2s',
+      stat2Label: 'END-TO-END RESPONSE TIME'
     },
     techStack: ['Python', 'LLMs', 'RAG', 'PostgreSQL', 'and More']
   },
@@ -80,51 +84,51 @@ export const allProjects = [
     company: 'Qurovo',
     website: 'https://qurovo.com',
     websiteLabel: 'QUROVO.COM',
-    title: 'Qurovo Redevelopment',
-    subtitle: 'Re-engineering the healthcare platform for performance, scalability, and faster product development.',
-    problem: 'The existing platform needed improvements in application performance, development architecture, and scalability. As the hospital directory and product functionality expanded, the engineering foundation needed to support growing data volumes, faster feature development, and a better user experience.',
-    solution: 'Led the redevelopment of the core platform, taking ownership of frontend and backend architecture, database integration, application performance, and cloud infrastructure considerations. Established a more modular and maintainable development architecture designed to support continued product growth.',
+    title: 'Qurovo',
+    subtitle: 'Full-stack redevelopment of a healthcare platform.',
+    problem: 'The existing platform required improvements in performance, maintainability, and scalability. Growing hospital data and product requirements made the existing application architecture increasingly difficult to extend.',
+    solution: 'Led the redevelopment of the platform across frontend, backend, database integration, and infrastructure. Reworked application architecture and data-access patterns to support new features and growing platform requirements.',
     contributions: [
-      'Led end-to-end technical strategy, architecture, and platform redevelopment',
-      'Redesigned frontend and backend application architecture',
-      'Improved database integration and data-access workflows',
-      'Optimized application performance and response times',
-      'Strengthened cloud and database infrastructure for growing platform requirements',
-      'Improved technical foundations for SEO, indexing, and discoverability',
-      'Established reusable application patterns to accelerate feature development'
+      'Owned frontend and backend redevelopment',
+      'Redesigned application architecture and data flows',
+      'Improved database queries and data-access patterns',
+      'Optimized application response times',
+      'Improved cloud infrastructure and deployment workflows',
+      'Implemented technical SEO and indexing improvements',
+      'Established reusable components and development patterns'
     ],
     tabs: {
       ARCHITECTURE: {
-        title: 'Full-Stack Platform Architecture',
-        description: "Re-engineered the platform's application structure, data flows, and backend services to support growing workloads, improve performance, and accelerate feature development.",
+        title: 'Application Architecture',
+        description: 'Reworked the application structure and backend integration to improve maintainability and support continued product development.',
         highlights: [
-          'Redesigned frontend and backend application structure',
-          'Improved database architecture and data-access patterns',
-          'Established modular and reusable application components',
-          'Strengthened application and infrastructure foundations for scaling',
-          'Improved the overall development workflow and maintainability'
+          'Redesigned frontend and backend architecture',
+          'Improved database integration and data-access patterns',
+          'Introduced reusable application components',
+          'Improved application structure and maintainability',
+          'Updated deployment and infrastructure workflows'
         ]
       },
       ENGINEERING: {
-        title: 'Performance & Development Optimization',
-        description: 'Focused on application performance, engineering efficiency, and a more consistent user experience across the platform.',
+        title: 'Performance & Development',
+        description: 'Worked on application performance, database efficiency, and development workflows.',
         highlights: [
           'Reduced application response times by approximately 80%',
           'Optimized frontend and backend execution paths',
-          'Improved database interactions and application data flows',
-          'Reduced new feature development time by approximately two-thirds',
-          'Improved website performance and technical SEO foundations'
+          'Improved database queries and data flows',
+          'Reduced feature development time by approximately 66%',
+          'Improved technical SEO and indexing'
         ]
       },
       IMPACT: {
-        title: 'Scalability & Platform Growth',
-        description: 'Established an engineering foundation capable of supporting a growing healthcare directory and expanding product functionality.',
+        title: 'Platform Growth',
+        description: 'Improved the engineering foundation to support the expansion of the healthcare directory and additional product features.',
         highlights: [
-          'Supported platform expansion to more than 10,000 hospitals',
-          'Improved response times by approximately 80%',
-          'Reduced new feature development time by approximately 70%',
-          'Improved technical SEO and search discoverability',
-          'Established a more scalable foundation for continued platform growth'
+          'Supported a directory of 10,000+ hospitals',
+          'Reduced application response times by approximately 80%',
+          'Reduced feature development time by approximately 66%',
+          'Improved search engine discoverability',
+          'Established reusable patterns for future development'
         ]
       }
     },
@@ -145,4 +149,3 @@ export const allProjects = [
     ]
   }
 ];
-
