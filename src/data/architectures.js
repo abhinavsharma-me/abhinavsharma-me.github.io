@@ -7,8 +7,8 @@ export const architectureCards = [
     title: 'UseWorldview',
     subtitle: 'AI-powered synthetic user research platform orchestrating autonomous personas through real websites.',
     tags: ['Next.js', 'FastAPI', 'Playwright', 'Supabase'],
-    visitUrl: 'https://github.com/useworldview/main',
-    visitLabel: 'github.com/useworldview/main',
+    visitUrl: 'https://github.com/useworldview/useworldview',
+    visitLabel: 'github.com/useworldview/useworldview',
     previewChart: `flowchart TD
   Researcher["Researcher"] --> WebApp["Next.js Workspace"]
   WebApp --> API["FastAPI Orchestrator"]

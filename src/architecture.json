@@ -8,8 +8,8 @@
     "heading": "Simulating User Experience with AI Personas",
     "description": "An AI-powered synthetic user research platform that sends diverse personas through real websites and turns their journeys into structured product insights.",
     "htmlFile": "/architectures/useworldview.html",
-    "visitUrl": "https://github.com/useworldview/main",
-    "visitLabel": "github.com/useworldview/main",
+    "visitUrl": "https://github.com/useworldview/useworldview",
+    "visitLabel": "github.com/useworldview/useworldview",
     "visitType": "github",
     "overview": "UseWorldview combines a Next.js research workspace with a FastAPI orchestration backend. Researchers submit a target URL and research goals, then the backend analyzes the site, identifies audience segments, generates AI personas, and schedules browser sessions. A Playwright-based worker lets each persona explore the target site, recording interaction events and screenshots. Post-session analysis produces findings and decision explanations, while cross-persona synthesis identifies patterns and generates prioritized recommendations. Supabase provides authentication, PostgreSQL storage, row-level security, and screenshot storage. The frontend reads study data directly from Supabase under RLS, while authenticated API requests handle study creation and long-running research jobs.",
     "architecturalDecisions": [
