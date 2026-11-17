@@ -1,5 +1,15 @@
 export const openSourceProjects = [
   {
+    id: 'vendorguard',
+    owner: 'abhinavsharma-me',
+    repo: 'vendorguard',
+    stars: '',
+    description: 'Autonomous AI-powered Third-Party Risk Management (TPRM) platform for automated vendor assessments, SOC 2 analysis, and compliance reviews.',
+    tags: ['AI System', 'TPRM', 'Compliance'],
+    type: 'Open Source',
+    url: 'https://github.com/abhinavsharma-me/vendorguard'
+  },
+  {
     id: 'crewbench',
     owner: 'crewbench',
     repo: 'crewbench',
@@ -18,20 +28,19 @@ export const openSourceProjects = [
     tags: ['AI Agents', 'Skills', 'Extensible'],
     type: 'Open Source',
     url: 'https://github.com/agent-skills-hub/agent-skills-hub'
-  },
-  {
-    id: 'codegrap',
-    owner: 'codegrap',
-    repo: 'codegrap',
-    stars: '',
-    description: 'Interactive codebase visualization tool that maps repositories into navigable, dependency-aware graphs.',
-    tags: ['Visualization', 'Graph', 'Code Analysis'],
-    type: 'Open Source',
-    url: 'https://github.com/codegrap/codegrap'
   }
 ];
 
 export const recentPullRequests = [
+  {
+    id: 'commit-6957280',
+    prNumber: '#4',
+    owner: 'abhinavsharma-me',
+    repo: 'vendorguard',
+    stars: '',
+    title: 'feat: complete VendorGuard SOA architecture implementation (web, api, workers, database, ai-engine, shared)',
+    url: 'https://github.com/abhinavsharma-me/vendorguard/commit/69572809b71df7f1c1addbcbc79052fd3f5cafe2'
+  },
   {
     id: 'commit-128',
     prNumber: '#20',

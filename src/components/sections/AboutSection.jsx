@@ -50,13 +50,13 @@ export default function AboutSection() {
             >
               Qurovo
             </a>
-            , focused on developing production-ready AI solutions for healthcare.
+            .
           </p>
 
           {/* TECHNOLOGIES & TOOLS Subheader with Expand/Collapse Action */}
           <div className="about-tech-header-wrap">
             <div className="about-tech-title-bar">
-              <span className="about-tech-label">TECHNOLOGIES &amp; TOOLS</span>
+              <span className="about-tech-label">TECHNOLOGIES &amp; TOOLS I USE</span>
               <button
                 type="button"
                 className="tech-expand-toggle-btn"
